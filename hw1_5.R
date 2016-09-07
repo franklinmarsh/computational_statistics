@@ -29,8 +29,9 @@ IterRecord <- function(inputfunction, seed, n_iter) {
   
   results <- list(seed)
   
-  for (i in 2:n_iter)
+  for (i in 2:n_iter) {
     results[i] <- inputfunction(results[i-1])
+  }
   
   return(results)
 }
