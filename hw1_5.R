@@ -33,7 +33,7 @@ IterRecord <- function(inputfunction, seed, n_iter) {
     results[i] <- inputfunction(as.numeric(results[i-1]))
   }
   
-  return(results)
+  return(as.numeric(results))
 }
 
 rand_numbers = IterRecord(MCG, 2, 1000)
@@ -46,7 +46,7 @@ MiddleSquare <- function(seed) {
   # compute a 'random' sequence of four-digit numbers using the Middle Square method.
   #
   # Args:
-  #   seed: the intial four digit number
+  #   seed: the intial four digit numbeMir
   # 
   # Returns:
   #   rand: new quasi-random number

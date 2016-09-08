@@ -41,32 +41,36 @@ G.3 <- function(x) {
 }
 
 G2.prime <- function(x) {
-  # returns the value of the function $G_{3}$ in problem 4.
+  # returns the value of the function $g'_{x}$ in problem 4.
   #
   # Args:
   #   x: the value at which to evaluate the function
   #
   # Returns:
-  #   $G_{3}(x)$
+  #   $g'(x)$
 
   return(x + log(x))
 }
 
-Bisector <- function(ifunc, a0, b0) {
-  # finds the root of a function (inputfunc) using the bisection method
+IterRecord <- function(inputfunction, seed, n_iter) {
+  
+  # iterate a recursive function over a list of numbers, recording each input and output.
   #
   # Args:
-  #   ifunc: the function that we wish to find the root of
-  #   a0: initial guess for the left bound of the bisector
-  #   b0: initial guess for the right bound of the bisector
+  #   inputfunction: the "seed" or $X_{0}$, initial value
+  #   seed: the input for the first run of inputfunction
+  #   n_iter: the number of iterations to be performed
+  #   
+  #   
+  # 
+  # Returns:
+  #   results: list of function outputs.
   
-  x0 <- (a0 + b0)/2.0 #the initial guess, constructed out of the left and right bounds
-  iters = 0
+  results <- list(seed)
   
-  while (iters < 5) {
-    if (ifunc(a0)*ifunc(b0) <= 0) {
-    }
+  for (i in 2:n_iter) {
+    results[i] <- inputfunction(as.numeric(results[i-1]))
   }
-    
   
+  return(as.numeric(results))
 }
