@@ -100,16 +100,18 @@ WhichNeighbors <- function (possibleSwaps, k) {
 MCMC <- function (m = NULL, initPerm = NULL, k) {
   # The input should be either an inital permutation or an m implying use the first m natural numbers
   # and a k which is the lower cutoff for "large" permutations
-  # Start by creating a vector to store the sizes of large perm'ns so we can calc avg size
-  bigPermSizes <- c()
+  # Start by creating a vector to store the mean of the sizes of large perm'ns
+  # Also store the number that have been added so we can calc avg size
+  bigPermAvg <- c(NULL, 0)
   # Generate the first permutation (the largest one)
   x <- GenX0(m, initPerm)
   # Confirm its size is greater than k
   if (FindSize(x) < k) {
     return (NULL)
   }
-  # Store the size of x0
-  append(bigPermSizes, FindSize(x), after = length(bigPermSizes))
+  # Store the size of x0 and update the number in bigPermAvg[2]
+  bigPermAvg[1] <- FindSize(x)
+  bigPermAvg[2] <- bigPermAvg[2] + 1
   # Designate the number of iterations to loop through
   n = 1000
     for (i in 1:n) {
@@ -131,10 +133,11 @@ MCMC <- function (m = NULL, initPerm = NULL, k) {
           swapped <- TRUE
         }
       }
-      # Store the size of the current x
-      append(bigPermSizes, FindSize(x), after = length(bigPermSizes))
+      # Update the average big size and the number of perm'ns that have been used
+      bigPermAvg[2] <- bigPermAvg[2] + 1
+      c <- bigPermAvg[2]
+      bigPermAvg[1] <- bigPermAvg[1]*((c-1)/c)+(FindSize(x)/c)
     }
   # Find the average size of all of the big permutations we've visited and return this value
-  avgSize <- sum(bigPermSizes)/length(bigPermSizes)
-  return (avgSize)
+  return (bigPermAvg)
 }
