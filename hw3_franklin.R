@@ -12,24 +12,21 @@ GenX0 <- function(m, initialPerm) {
   }
 }
 
-# A function which generates all m choose 2 possibles 2 elements swaps from a permutation
-GenSwaps <- function(x0) {
-  # Input is a vector of the permutation in order
-  out <- c() #initialize empty list to hold all possible permutations with 1 swap
-  i <- 0
+GenOneSwap <- function(x0) {
   
-  for (j in (1:length(x0))) {
-    i <- i + 1
-    for (k in (1:length(x0))) {
-      i < i + 1
-      out[i] <- replace(x0, c(j,k), x0[c(k,j)])  
-    }
+  out <- x0 #initialize empty list to hold all possible swaps
+  
+  while (identical(out, x0) == TRUE) { #if the input and output are identical
+        j <- sample((1:length(x0)), 1) #pick an index at random
+        k <- sample((1:length(x0)), 1) #pick another index at random
+    out <- replace(x0, x0[c(j,k)], x0[c(k,j)]) #swap those two elements.
   }
-  return(out)
+  return(out) 
 }
 
-# A function to check the size of a permutation
 FindSize <- function(x) {
+  
+  # A function to check the size of a permutation
   # Input is a vector of the permutation in order
   sizes <- c()
   # Loop through each index of the permutation and multiply by the index
