@@ -1,6 +1,6 @@
 # A function to generate the largest permutation given a vector of values or an m
 # which implies that the vector of values is the first m natural numbers
-GenX0 <- function(m, initialPerm) {
+GenX0 <- function(m = NULL, initialPerm = NULL) {
   # The input should be either an inital permutation of an m
   # If both are given, the m will be used
   if (!is.null(m)){
@@ -8,24 +8,36 @@ GenX0 <- function(m, initialPerm) {
   }
   # If m is null, sort the initial vector into increasing order
   else {
-    return (sort(initialPerm(decreasing = FALSE)))
+    return (sort(initialPerm, decreasing = FALSE))
   }
 }
 
+# A function which swaps two elements given a vector and the indeces to be swapped
+Swap <- function (x, i, j) {
+  # x is vector of perm'n and i and j are the indeces to be swapped
+  # Save the ith element
+  tempI <- x[i]
+  # Change the ith element to the jth element
+  x[i] <- x[j]
+  # Change the jth element to the ith element
+  x[j] <- tempI
+  # Return the new vector
+  return (x)
+}
+
 # A function which generates all m choose 2 possibles 2 elements swaps from a permutation
-GenSwaps <- function(x0) {
+GenSwaps <- function(x) {
   # Input is a vector of the permutation in order
-  out <- c() #initialize empty list to hold all possible permutations with 1 swap
-  i <- 0
-  
-  for (j in (1:length(x0))) {
-    i <- i + 1
-    for (k in (1:length(x0))) {
-      i < i + 1
-      out[i] <- replace(x0, c(j,k), x0[c(k,j)])  
+  # Initialize empty list to hold all possible permutations with 1 swap
+  output <- c()
+  # Loop through each element and generate the swaps with all the elements after it
+  for (i in (1:length(x))) {
+    for (j in (i:length(x))) {
+      # Add each new potential neighbor to the vector to store them
+      append(output, Swap(x, i, j), after = length(output))
     }
   }
-  return(out)
+  return(output)
 }
 
 # A function to check the size of a permutation
@@ -85,7 +97,7 @@ WhichNeighbors <- function (possibleSwaps, k) {
 
 # A markov chain monte carlo algorithm to find the average size of permutations
 # whose size is greater than a given k
-MCMC <- function (m, initPerm, k) {
+MCMC <- function (m = NULL, initPerm = NULL, k) {
   # The input should be either an inital permutation or an m implying use the first m natural numbers
   # and a k which is the lower cutoff for "large" permutations
   # Start by creating a vector to store the sizes of large perm'ns so we can calc avg size
@@ -99,7 +111,7 @@ MCMC <- function (m, initPerm, k) {
   # Store the size of x0
   append(bigPermSizes, FindSize(x), after = length(bigPermSizes))
   # Designate the number of iterations to loop through
-  n = 
+  n = 1000
     for (i in 1:n) {
       # Generate all possible neighbors of x
       xSwaps <- GenSwaps(x)
