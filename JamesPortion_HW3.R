@@ -30,13 +30,13 @@ GenSwaps <- function(x) {
   # Input is a vector of the permutation in order
   # Initialize empty matrix to hold all possible permutations with 1 swap
   # 1 Column = 1 Permutation
-  output <- matrix(data = NA, nrow = choose(length(x)-1, 2), ncol = length(x))
+  output <- matrix(data = NA, nrow = choose(length(x), 2) + 2, ncol = length(x))
   index <- 1
   # Loop through each element and generate the swaps with all the elements after it
   for (i in (1:length(x))) {
-    for (j in (i+1:length(x)-1)) {
+    for (j in ((i+1):length(x)-1)) {
       # Add each new potential neighbor to the vector to store them
-      output[index,] = Swap(x, i, j)
+      output[index,] <- Swap(x, i, j)
       index <- index + 1
     }
   }
