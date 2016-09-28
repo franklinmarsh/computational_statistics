@@ -40,7 +40,8 @@ GenSwaps <- function(x) {
       index <- index + 1
     }
   }
-  return(unique(output))
+  # Return only the unique swaps and take away the last NA line
+  return(unique(output)[-length(unique(output)[ ,1]), ])
 }
 
 # A function to check the size of a permutation
@@ -88,11 +89,17 @@ ChangeCheck <- function (nX, nY) {
 # A function to find which of the possible swaps are neighbors when given the swaps and the k size cutoff
 WhichNeighbors <- function (possibleSwaps, k) {
   # Input: Possible swaps is a matrix with rows being possible swaps
-  # Loop through each swap checking if its size is greater than k
-  for (j in 1:length(possibleSwaps[,1])) {
-    if (FindSize(possibleSwaps[j,]) <= k || is.na(possibleSwaps[j,1])){
+  # Loop through each swap/row checking if its size is greater than k
+  j=1
+  while (j <= length(possibleSwaps[,1])) {
+    if (FindSize(possibleSwaps[j,]) <= k){
       # If the swap doesn't produce a neighbor, take it out of the matrix
       possibleSwaps <- possibleSwaps[-j,]
+    }
+    else {
+      # Otherwise move on to the next row of the matrix
+      # Note we don't move to the next row if one row is removed because that would cause a skipped row
+      j <- j + 1
     }
   }
   return (possibleSwaps)
