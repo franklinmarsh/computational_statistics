@@ -27,7 +27,8 @@ explore<-function(x, tao, h, num.iter, eps){
 #'@param num.iter number of iterations
 #'@param tao.length length of tao
 #'
-sim.annealing<-function(x, h, tau_range, num.iter, tao.length, eps){
+#'
+SimAnnealing <- function(x, h, tau_range, num.iter, tao.length, eps){
   
   path <- c(x)
   tao<-(seq(tau_range[1], tau_range[2], length.out=tao.length))
@@ -39,6 +40,6 @@ sim.annealing<-function(x, h, tau_range, num.iter, tao.length, eps){
   return(path)
 }
 
-mypath <- sim.annealing(-5, h,c(7,-3), 10, 1000, 0.1)
+mypath <- SimAnnealing(-5, h,c(7,-3), 100, 100, 0.1)
 plot(mypath, type = 'l')
 print(mypath[length(mypath)])
