@@ -1,0 +1,61 @@
+Homework 5:  
+Read (you don't need to have a handle on all the calculations, none of which are hard though) http://www.mit.edu/~ilkery/papers/GibbsSampling.pdf
+Write code to both generate from the process described.  
+Then perform a Gibbs sampler routine to perform Bayesian inference with your data.  Note that a discrete uniform routine needs to be used for the posterior conditional for n.  All the details are given in the paper.  
+Write a half page to a page (not including graphics) to talk about how this works. 
+
+# Generate data
+
+# Hyperparameters
+N=50
+a=2
+b=1
+
+# Change-point: where the intensity parameter changes.
+n=int(round(uniform.rvs()*N))
+print str(n)
+
+# Intensity values
+lambda1=gamma.rvs(a,scale=1./b) # We use 1/b instead of b because of the way Gamma distribution is parametrized in the package random.
+lambda2=gamma.rvs(a,scale=1./b)
+
+lambdas=[lambda1]*n
+lambdas[n:N-1]=[lambda2]*(N-n)
+
+# Observations, x_1 ... x_N
+x=poisson.rvs(lambdas)
+
+——
+
+# Gibbs sampler
+E=5200
+BURN_IN=200
+
+# Initialize the chain
+n=int(round(uniform.rvs()*N))
+lambda1=gamma.rvs(a,scale=1./b)
+lambda2=gamma.rvs(a,scale=1./b)
+
+# Store the samples
+chain_n=numpy.array([0.]*(E-BURN_IN))
+chain_lambda1=numpy.array([0.]*(E-BURN_IN))
+chain_lambda2=numpy.array([0.]*(E-BURN_IN))
+
+for e in range(E):
+	print "At iteration "+str(e)
+	# sample lambda1 and lambda2 from their posterior conditionals, Equation 8 and Equation 9, respectively.
+	lambda1=gamma.rvs(a+sum(x[0:n]), scale=1./(n+b))
+	lambda2=gamma.rvs(a+sum(x[n:N]), scale=1./(N-n+b))
+	
+	# sample n, Equation 10
+	mult_n=numpy.array([0]*N)
+	for i in range(N):
+		mult_n[i]=sum(x[0:i])*log(lambda1)-i*lambda1+sum(x[i:N])*log(lambda2)-(N-i)*lambda2
+	mult_n=exp(mult_n-max(mult_n))
+	n=numpy.where(multinomial(1,mult_n/sum(mult_n),size=1)==1)[1][0]
+	
+	# store
+	if e>=BURN_IN:
+		chain_n[e-BURN_IN]=n
+		chain_lambda1[e-BURN_IN]=lambda1
+		chain_lambda2[e-BURN_IN]=lambda2
