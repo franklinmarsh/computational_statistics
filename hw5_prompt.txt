@@ -59,3 +59,4 @@ for e in range(E):
 		chain_n[e-BURN_IN]=n
 		chain_lambda1[e-BURN_IN]=lambda1
 		chain_lambda2[e-BURN_IN]=lambda2
+
