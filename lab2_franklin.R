@@ -21,7 +21,6 @@ Breed <- function(bp) {
   return(babies)
 }
              
-
 generations <- 1
 orgs <- list(Gen0(10, c(-10,10)))
 
