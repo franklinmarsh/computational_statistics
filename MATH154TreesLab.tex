@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage{Sweave}
+\begin{document}
+\input{MATH154TreesLab-concordance}
+
+\begin{Schunk}
+\begin{Sinput}
+> # In addition to using the kaggle data, load the data set mtcars into R via the
+> # command data(mtcars). Try to predict the fuel efficiency (mpg) via a regression tree, and try to predict the transmission type (automatic or manual) via a classification
+> # tree.
+> #You may want to compare the regression tree to a linear model.
+> # plot(mtcars) will give you all the pairwise scatter plots. Notice that most of the
+> # relationships with MPG are non-linear.
+> 
+> # Additionally, R has a package called randomForest. The most useful function,
+> # which implements the algorithm discussed in class, is of the same name. Compare
+> # the classification rates for a random forest to that of a simple tree.
+> 
+> install.packages("tree")
