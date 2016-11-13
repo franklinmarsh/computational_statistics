@@ -1,7 +1,6 @@
 \documentclass{article}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
 
 <<>>=
 
@@ -87,8 +86,6 @@ points(prediction.lm, col = 'red')
 # to do: 
 # reduce the number f variables? stepwise regression?
 # consider nonlinear relationships 
-
-@
 
 
 \end{document}
