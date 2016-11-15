@@ -16,8 +16,8 @@
 # which implements the algorithm discussed in class, is of the same name. Compare
 # the classification rates for a random forest to that of a simple tree.
 
-install.packages("tree", repos = )
-install.packages("randomForest", repos = )
+install.packages("tree", repos = 'http://cran.stat.ucla.edu/' )
+install.packages("randomForest", repos = 'http://cran.stat.ucla.edu/' )
 library(tree)
 library(randomForest)
 library(datasets)
