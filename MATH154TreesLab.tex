@@ -64,15 +64,7 @@
 \maketitle
 
 In addition to using the kaggle data, load the data set mtcars into R via the
-command data(mtcars). Try to predict the fuel efficiency (mpg) via a regression tree, and try to predict the transmission type (automatic or manual) via a classification
-tree.
-You may want to compare the regression tree to a linear model.
-plot(mtcars) will give you all the pairwise scatter plots. Notice that most of the
-relationships with MPG are non-linear.
-
-Additionally, R has a package called randomForest. The most useful function,
-which implements the algorithm discussed in class, is of the same name. Compare
-the classification rates for a random forest to that of a simple tree.
+command data(mtcars). Try to predict the fuel efficiency (mpg) via a regression tree, and try to predict the transmission type (automatic or manual) via a classification tree. You may want to compare the regression tree to a linear model. plot(mtcars) will give you all the pairwise scatter plots. Notice that most of the relationships with MPG are non-linear. Additionally, R has a package called randomForest. The most useful function, which implements the algorithm discussed in class, is of the same name. Compare the classification rates for a random forest to that of a simple tree.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -90,14 +82,13 @@ the classification rates for a random forest to that of a simple tree.
 {\ttfamily\noindent\itshape\color{messagecolor}{\#\# Type rfNews() to see new features/changes/bug fixes.}}\begin{alltt}
 \hlkwd{library}\hlstd{(datasets)}
 \hlcom{# library(reprtree)}
-
 \hlkwd{data}\hlstd{(mtcars)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
 
-In order to predict the fuel efficiency we implemented a regression tree and  a linear regression model to later compare results. We divided the data into a training and test set. Since the sample size is only thirty-two, the two sets only had sixteen observations. One method we used to compare the performance of both models was residual sum of squares. We consistently found that predictions made with a linear regression model had a lower residual sum of squares than those made with a regression tree. It may be due to there only being three nodes and therefore, three averages which new observations can take on. 
+In order to predict the fuel efficiency we implemented a regression tree and  a linear regression model to later compare results. We divided the data into a training and test set. Since the sample size is only thirty-two, the two sets only had sixteen observations. One method we used to compare the performance of both models was residual sum of squares. We consistently found that predictions made with a linear regression model had a lower residual sum of squares than those made with a regression tree. It may be due to there only being three nodes and therefore, three averages which new observations can take on. The variables that the regression tree selected were the number of cylinders and the weight of the car to create partitions. 
 
 
 \begin{knitrout}
@@ -106,10 +97,8 @@ In order to predict the fuel efficiency we implemented a regression tree and  a 
 \hlcom{# Regression Tree}
 \hlstd{test.index} \hlkwb{=} \hlkwd{sample}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(mtcars)),}\hlkwd{nrow}\hlstd{(mtcars)}\hlopt{/}\hlnum{2} \hlstd{)}
 \hlstd{training.index}\hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(mtcars))[}\hlopt{-}\hlstd{test.index]}
-
 \hlstd{test.data} \hlkwb{=} \hlstd{mtcars[test.index,]}
 \hlstd{training.data} \hlkwb{=} \hlstd{mtcars[training.index,]}
-
 \hlstd{cars.regression} \hlkwb{<-} \hlkwd{tree}\hlstd{(mpg} \hlopt{~} \hlstd{cyl}\hlopt{+}\hlstd{disp}\hlopt{+}\hlstd{hp}\hlopt{+}\hlstd{drat}\hlopt{+}\hlstd{wt}\hlopt{+}\hlstd{qsec}\hlopt{+}\hlstd{vs}\hlopt{+}\hlstd{am}\hlopt{+}\hlstd{gear}\hlopt{+}\hlstd{carb,} \hlkwc{data}\hlstd{=training.data)}
 \hlkwd{plot}\hlstd{(cars.regression )}
 \hlkwd{text}\hlstd{(cars.regression ,} \hlkwc{cex}\hlstd{=}\hlnum{.75}\hlstd{)}
@@ -118,34 +107,24 @@ In order to predict the fuel efficiency we implemented a regression tree and  a 
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
 \begin{kframe}\begin{alltt}
 \hlstd{my.prediction} \hlkwb{<-} \hlkwd{predict}\hlstd{(cars.regression, test.data)}
-
 \hlcom{# find RSS }
 \hlstd{residuals} \hlkwb{=} \hlstd{(test.data}\hlopt{$}\hlstd{mpg} \hlopt{-} \hlstd{my.prediction)}\hlopt{^}\hlnum{2}
 \hlkwd{sum}\hlstd{(residuals}\hlopt{^}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 8133.442
+## [1] 7015.598
 \end{verbatim}
 \begin{alltt}
 \hlcom{# plot residuals }
-\hlkwd{plot}\hlstd{(residuals)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-2} 
-\begin{kframe}\begin{alltt}
+\hlkwd{par}\hlstd{(}\hlkwc{mfrow}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{))}
+\hlkwd{plot}\hlstd{(residuals,} \hlkwc{main}\hlstd{=} \hlstr{'Residuals from Regression Tree'}\hlstd{)}
 \hlcom{# plot of actual and predictions}
-\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{mpg,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{40}\hlstd{))}
+\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{mpg,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{40}\hlstd{),} \hlkwc{main} \hlstd{=} \hlstr{' Predictions and Actual'}\hlstd{)}
 \hlkwd{points}\hlstd{(my.prediction,} \hlkwc{col} \hlstd{=} \hlstr{'red'}\hlstd{)}
 \hlkwd{legend}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{10}\hlstd{,} \hlkwc{legend}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Actual"}\hlstd{,} \hlstr{"Predictions"}\hlstd{),}
        \hlkwc{col}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,} \hlstr{"red"}\hlstd{),}\hlkwc{pch} \hlstd{=} \hlnum{1}\hlstd{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-3} 
-\begin{kframe}\begin{alltt}
 \hlcom{#####}
 \hlcom{# Comparing to a Linear model }
-\hlcom{#plot(mtcars)}
-
 \hlstd{cars.lm} \hlkwb{<-} \hlkwd{lm} \hlstd{( mpg} \hlopt{~} \hlstd{cyl}\hlopt{+}\hlstd{disp}\hlopt{+}\hlstd{hp}\hlopt{+}\hlstd{drat}\hlopt{+}\hlstd{wt}\hlopt{+}\hlstd{qsec}\hlopt{+}\hlstd{vs}\hlopt{+}\hlstd{am}\hlopt{+}\hlstd{gear}\hlopt{+}\hlstd{carb,} \hlkwc{data}\hlstd{= training.data)}
 \hlstd{prediction.lm} \hlkwb{<-} \hlkwd{predict}\hlstd{(cars.lm, test.data)}
 \hlcom{# find RSS }
@@ -153,33 +132,24 @@ In order to predict the fuel efficiency we implemented a regression tree and  a 
 \hlkwd{sum}\hlstd{(residuals.lm}\hlopt{^}\hlnum{2}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 24604.64
+## [1] 2472197
 \end{verbatim}
 \begin{alltt}
 \hlcom{# plot residuals }
 \hlkwd{plot}\hlstd{(residuals.lm,} \hlkwc{main} \hlstd{=} \hlstr{"Residuals from Linear Model"}\hlstd{)}
-\end{alltt}
-\end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-4} 
-\begin{kframe}\begin{alltt}
 \hlcom{# plot of actual and predictions}
-\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{mpg,} \hlkwc{main}\hlstd{=} \hlstr{"Plot of Actual vs. Prediction from Linear Model"}\hlstd{,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{40}\hlstd{))}
+\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{mpg,} \hlkwc{main}\hlstd{=} \hlstr{" Actual vs. Prediction from Linear Model"}\hlstd{,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{40}\hlstd{))}
 \hlkwd{points}\hlstd{(prediction.lm,} \hlkwc{col} \hlstd{=} \hlstr{'red'}\hlstd{)}
 \hlkwd{legend}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{10}\hlstd{,} \hlkwc{legend}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Actual"}\hlstd{,} \hlstr{"Predictions"}\hlstd{),}
        \hlkwc{col}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,} \hlstr{"red"}\hlstd{),}\hlkwc{pch} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-5} 
-\begin{kframe}\begin{alltt}
-\hlcom{# to do: }
-\hlcom{# reduce the number f variables? stepwise regression?}
-\hlcom{# consider nonlinear relationships }
-\end{alltt}
-\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-2} 
+
 \end{knitrout}
 
 
-We used Classification and Random Forests to predict the transmission type of a car. The classification tree had three terminal nodes and used \textit{weight} and \textit{mpg} in the tree. Since the response variable was binary we calculated the proportion of times each method predicted  accurately. The accuracy of the predictions from both methods were about the same.  
+We used Classification and Random Forests to predict the transmission type of a car. The classification tree had two terminal nodes and used \textit{weight} as a point of partition. Since the response variable was binary we calculated the proportion of times each method predicted  accurately. The accuracy of the predictions from both methods were about the same. To compare the success rates of both we ran multiple simulations and recorded the proportion of successes. After running the simulation below several times we observed that random forests provided consistently had less incorrect predictions. 
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -188,54 +158,48 @@ We used Classification and Random Forests to predict the transmission type of a 
 \hlcom{# Use a classification tree to predict transmission type of car}
 \hlcom{# Transmission (0 = automatic, 1 = manual)}
 
+\hlstd{incorrect.predict.Forest} \hlkwb{=} \hlkwd{c}\hlstd{()}
+\hlstd{incorrect.predict.class} \hlkwb{=} \hlkwd{c}\hlstd{()}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlnum{40}\hlstd{))\{}
+\hlstd{test.index} \hlkwb{=} \hlkwd{sample}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(mtcars)),}\hlkwd{nrow}\hlstd{(mtcars)}\hlopt{/}\hlnum{2} \hlstd{)}
+\hlstd{training.index}\hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(mtcars))[}\hlopt{-}\hlstd{test.index]}
+
+\hlstd{test.data} \hlkwb{=} \hlstd{mtcars[test.index,]}
+\hlstd{training.data} \hlkwb{=} \hlstd{mtcars[training.index,]}
+
 \hlstd{cars.class}\hlkwb{<-}\hlkwd{tree}\hlstd{(am} \hlopt{~} \hlstd{mpg}\hlopt{+}\hlstd{cyl}\hlopt{+}\hlstd{disp}\hlopt{+}\hlstd{hp}\hlopt{+}\hlstd{drat}\hlopt{+}\hlstd{wt}\hlopt{+}\hlstd{qsec}\hlopt{+}\hlstd{vs}\hlopt{+}\hlstd{gear}\hlopt{+}\hlstd{carb,} \hlkwc{data}\hlstd{=training.data)}
 \hlkwd{summary}\hlstd{(cars.class)}
-\end{alltt}
-\begin{verbatim}
-## 
-## Regression tree:
-## tree(formula = am ~ mpg + cyl + disp + hp + drat + wt + qsec + 
-##     vs + gear + carb, data = training.data)
-## Variables actually used in tree construction:
-## [1] "wt"
-## Number of terminal nodes:  2 
-## Residual mean deviance:  0 = 0 / 14 
-## Distribution of residuals:
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##       0       0       0       0       0       0
-\end{verbatim}
-\begin{alltt}
-\hlkwd{plot}\hlstd{(cars.class)}
+
+\hlstd{my.prediction.class} \hlkwb{<-} \hlkwd{predict}\hlstd{(cars.class, test.data)}
+\hlstd{my.prediction.class[(my.prediction.class} \hlopt{<} \hlnum{0.5}\hlstd{)]} \hlkwb{=} \hlnum{0}
+\hlstd{my.prediction.class[(my.prediction.class} \hlopt{>} \hlnum{0.5}\hlstd{)]} \hlkwb{=} \hlnum{1}
+\hlcom{# how many incorrect predictions }
+\hlstd{incorrect.predict.class[i]} \hlkwb{=} \hlkwd{sum}\hlstd{(}\hlkwd{abs}\hlstd{(my.prediction.class} \hlopt{-} \hlstd{test.data}\hlopt{$}\hlstd{am)} \hlopt{>} \hlnum{.5}\hlstd{)}
+
+\hlcom{####}
+\hlcom{# Using a Random Forest}
+\hlstd{cars.Forest} \hlkwb{<-} \hlkwd{randomForest}\hlstd{(}\hlkwd{as.factor}\hlstd{(am)} \hlopt{~} \hlstd{mpg}\hlopt{+}\hlstd{cyl}\hlopt{+}\hlstd{disp}\hlopt{+}\hlstd{hp}\hlopt{+}\hlstd{drat}\hlopt{+}\hlstd{wt}\hlopt{+}\hlstd{qsec}\hlopt{+}\hlstd{vs}\hlopt{+}\hlstd{gear}\hlopt{+}\hlstd{carb,} \hlkwc{data}\hlstd{=training.data ,} \hlkwc{importance}\hlstd{=}\hlnum{TRUE}\hlstd{,}
+                            \hlkwc{ntree}\hlstd{=}\hlnum{128}\hlstd{)}
+\hlstd{prediction.Forest}\hlkwb{<-} \hlkwd{predict}\hlstd{(cars.Forest, test.data)}
+\hlcom{# how many incorrect predictions }
+\hlstd{incorrect.predict.Forest[i]} \hlkwb{=} \hlkwd{sum}\hlstd{(}\hlkwd{abs}\hlstd{((}\hlkwd{as.numeric}\hlstd{(prediction.Forest)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{-} \hlstd{test.data}\hlopt{$}\hlstd{am)} \hlopt{>} \hlnum{.5}\hlstd{)}
+\hlstd{\}}
+
+\hlkwd{plot}\hlstd{(cars.class, ,} \hlkwc{main}\hlstd{=} \hlstr{'Classification Results'}\hlstd{)}
 \hlkwd{text}\hlstd{(cars.class)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-1} 
 \begin{kframe}\begin{alltt}
-\hlstd{my.prediction.class} \hlkwb{<-} \hlkwd{predict}\hlstd{(cars.class, test.data)}
-\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{am,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{2.1}\hlstd{))}
+\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{am,} \hlkwc{ylim} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{),} \hlkwc{main}\hlstd{=} \hlstr{'Results from Classification Tree'}\hlstd{)}
 \hlkwd{points}\hlstd{(my.prediction.class,}\hlkwc{col} \hlstd{=} \hlstr{'purple'}\hlstd{,} \hlkwc{pch} \hlstd{=} \hlstr{"."}\hlstd{)}
-\hlkwd{legend}\hlstd{(}\hlnum{2}\hlstd{,} \hlnum{2}\hlstd{,} \hlkwc{legend}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Actual"}\hlstd{,} \hlstr{"Predictions"}\hlstd{),}
+\hlkwd{legend}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{0.4}\hlstd{,} \hlkwc{legend}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Actual"}\hlstd{,} \hlstr{"Predictions"}\hlstd{),}
        \hlkwc{col}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,} \hlstr{"purple"}\hlstd{),}\hlkwc{pch} \hlstd{=} \hlnum{1}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-2} 
 \begin{kframe}\begin{alltt}
-\hlcom{# how many incorrect predictions }
-\hlstd{incorrect.predict} \hlkwb{=} \hlkwd{sum}\hlstd{(}\hlkwd{abs}\hlstd{(my.prediction.class} \hlopt{-} \hlstd{test.data}\hlopt{$}\hlstd{am)} \hlopt{>} \hlnum{.5}\hlstd{)}
-\hlstd{incorrect.predict}
-\end{alltt}
-\begin{verbatim}
-## [1] 3
-\end{verbatim}
-\begin{alltt}
-\hlcom{####}
-\hlcom{# Using a Random Forest}
-
-\hlstd{cars.Forest} \hlkwb{<-} \hlkwd{randomForest}\hlstd{(}\hlkwd{as.factor}\hlstd{(am)} \hlopt{~} \hlstd{mpg}\hlopt{+}\hlstd{cyl}\hlopt{+}\hlstd{disp}\hlopt{+}\hlstd{hp}\hlopt{+}\hlstd{drat}\hlopt{+}\hlstd{wt}\hlopt{+}\hlstd{qsec}\hlopt{+}\hlstd{vs}\hlopt{+}\hlstd{gear}\hlopt{+}\hlstd{carb,} \hlkwc{data}\hlstd{=training.data ,} \hlkwc{importance}\hlstd{=}\hlnum{TRUE}\hlstd{,}
-                            \hlkwc{ntree}\hlstd{=}\hlnum{128}\hlstd{)}
-\hlstd{prediction.Forest}\hlkwb{<-} \hlkwd{predict}\hlstd{(cars.Forest, test.data)}
-
-\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{am)}
+\hlkwd{plot}\hlstd{(test.data}\hlopt{$}\hlstd{am,} \hlkwc{main}\hlstd{=} \hlstr{'Results from Random Forest'}\hlstd{)}
 \hlkwd{points}\hlstd{(}\hlkwd{as.numeric}\hlstd{(prediction.Forest)}\hlopt{-}\hlnum{1}\hlstd{,}\hlkwc{col} \hlstd{=} \hlstr{'purple'}\hlstd{,} \hlkwc{pch} \hlstd{=} \hlstr{"."}\hlstd{)}
 \hlkwd{legend}\hlstd{(}\hlnum{1}\hlstd{,} \hlnum{0.4}\hlstd{,} \hlkwc{legend}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"Actual"}\hlstd{,} \hlstr{"Predictions"}\hlstd{),}
        \hlkwc{col}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"black"}\hlstd{,} \hlstr{"purple"}\hlstd{),}\hlkwc{pch} \hlstd{=} \hlnum{1}\hlstd{)}
@@ -243,11 +207,30 @@ We used Classification and Random Forests to predict the transmission type of a 
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-3} 
 \begin{kframe}\begin{alltt}
-\hlstd{incorrect.predict.Forest} \hlkwb{=} \hlkwd{sum}\hlstd{(}\hlkwd{abs}\hlstd{((}\hlkwd{as.numeric}\hlstd{(prediction.Forest)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{-} \hlstd{test.data}\hlopt{$}\hlstd{am)} \hlopt{>} \hlnum{.5}\hlstd{)}
 \hlstd{incorrect.predict.Forest}
 \end{alltt}
 \begin{verbatim}
-## [1] 3
+##  [1] 0 5 5 4 2 2 3 3 4 4 2 3 5 2 2 1 5 5 1 1 4 4 4 1 3 1 4 2 6 1 4 5 5 3 4
+## [36] 2 3 3 1 3
+\end{verbatim}
+\begin{alltt}
+\hlstd{incorrect.predict.class}
+\end{alltt}
+\begin{verbatim}
+##  [1] 1 6 4 2 2 3 2 4 4 4 4 5 5 3 3 3 6 3 2 2 5 0 5 1 4 2 2 2 4 2 6 2 2 3 4
+## [36] 3 3 3 2 4
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{(incorrect.predict.Forest)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3.05
+\end{verbatim}
+\begin{alltt}
+\hlkwd{mean}\hlstd{(incorrect.predict.class)}
+\end{alltt}
+\begin{verbatim}
+## [1] 3.175
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
